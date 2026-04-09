@@ -13,7 +13,7 @@ export async function POST(request: Request) {
 
   const { action, guideline } = body;
 
-  if (!action?.trim() || !guideline?.trim()) {
+  if (!action || !guideline) {
     return NextResponse.json(
       { error: "Both 'action' and 'guideline' fields are required" },
       { status: 400 },

@@ -1,4 +1,17 @@
+"use client";
+
+import { AnalyzeInputForm } from "@/components/analyze-input-form";
+import { AnalysisRecord } from "@/lib/types";
+import { useCallback, useState } from "react";
+
 export default function Home() {
+  const [editValues, setEditValues] = useState<{
+    action: string;
+    guideline: string;
+  } | null>(null);
+
+  const handleResult = useCallback((record: AnalysisRecord) => {}, []);
+
   return (
     <div className="flex flex-1 flex-col items-center bg-muted/30">
       <main className="w-full max-w-2xl px-4 py-12 space-y-8">
@@ -11,6 +24,14 @@ export default function Home() {
             zero-shot classification.
           </p>
         </header>
+
+        <section aria-label="Analysis form">
+          <AnalyzeInputForm
+            onResult={handleResult}
+            editValues={editValues}
+            onEditConsumed={() => {}}
+          />
+        </section>
       </main>
     </div>
   );
