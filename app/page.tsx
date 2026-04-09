@@ -1,8 +1,11 @@
 "use client";
 
 import { AnalyzeInputForm } from "@/components/analyze-input-form";
+import { HistoryList } from "@/components/history-list";
 import { LatestResult } from "@/components/latest-result";
+import { Separator } from "@/components/ui/separator";
 import { AnalysisRecord } from "@/lib/types";
+import { useHistory } from "@/lib/use-history";
 import { useCallback, useState } from "react";
 
 export default function Home() {
@@ -11,9 +14,22 @@ export default function Home() {
     guideline: string;
   } | null>(null);
   const [latestResult, setLatestResult] = useState<AnalysisRecord | null>(null);
+  const { history, addRecord, clearHistory } = useHistory();
 
-  const handleResult = useCallback((record: AnalysisRecord) => {
-    setLatestResult(record);
+  const handleResult = useCallback(
+    (record: AnalysisRecord) => {
+      setLatestResult(record);
+      addRecord(record);
+    },
+    [addRecord],
+  );
+
+  const handleEdit = useCallback((record: AnalysisRecord) => {
+    setEditValues({ action: record.action, guideline: record.guideline });
+  }, []);
+
+  const handleEditConsumed = useCallback(() => {
+    setEditValues(null);
   }, []);
 
   return (
@@ -33,11 +49,21 @@ export default function Home() {
           <AnalyzeInputForm
             onResult={handleResult}
             editValues={editValues}
-            onEditConsumed={() => {}}
+            onEditConsumed={handleEditConsumed}
           />
         </section>
 
         <LatestResult record={latestResult} />
+
+        <Separator />
+
+        <section aria-label="Analysis history">
+          <HistoryList
+            history={history}
+            onEdit={handleEdit}
+            onClear={clearHistory}
+          />
+        </section>
       </main>
     </div>
   );
