@@ -1,6 +1,7 @@
 "use client";
 
 import { AnalyzeInputForm } from "@/components/analyze-input-form";
+import { LatestResult } from "@/components/latest-result";
 import { AnalysisRecord } from "@/lib/types";
 import { useCallback, useState } from "react";
 
@@ -9,8 +10,11 @@ export default function Home() {
     action: string;
     guideline: string;
   } | null>(null);
+  const [latestResult, setLatestResult] = useState<AnalysisRecord | null>(null);
 
-  const handleResult = useCallback((record: AnalysisRecord) => {}, []);
+  const handleResult = useCallback((record: AnalysisRecord) => {
+    setLatestResult(record);
+  }, []);
 
   return (
     <div className="flex flex-1 flex-col items-center bg-muted/30">
@@ -32,6 +36,8 @@ export default function Home() {
             onEditConsumed={() => {}}
           />
         </section>
+
+        <LatestResult record={latestResult} />
       </main>
     </div>
   );
